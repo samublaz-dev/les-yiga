@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Les Yiga ❤️</title>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #eadcff,
+                #dbeafe
+            );
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           PAGE D'ACCUEIL
+           ========================= */
+
+        #accueil {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+
+        .accueil-box {
+            background: white;
+            width: 430px;
+            max-width: 100%;
+            padding: 45px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow:
+                0 15px 50px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin: auto;
+            border-radius: 30px;
+            background: #7c3aed;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+        }
+
+
+        h1 {
+            color: #7c3aed;
+            font-size: 48px;
+            margin: 20px 0 5px;
+        }
+
+
+        .slogan {
+            color: #777;
+            font-size: 18px;
+        }
+
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+
+        input:focus {
+            border-color: #7c3aed;
+        }
+
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 14px 20px;
+            background: #7c3aed;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+
+        button:hover {
+            background: #6d28d9;
+        }
+
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+
+        .entrer {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+
+        #erreur {
+            color: #dc2626;
+            margin-top: 12px;
+        }
+
+
+        /* =========================
+           APPLICATION
+           ========================= */
+
+        #application {
+            display: none;
+            min-height: 100vh;
+        }
+
+
+        .barre {
+            height: 75px;
+            background: #7c3aed;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+        }
+
+
+        .titre-barre {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+
+        .petit-logo {
+            width: 45px;
+            height: 45px;
+            background: white;
+            color: #7c3aed;
+            border-radius: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+
+
+        .barre h2 {
+            margin: 0;
+        }
+
+
+        .barre button {
+            background: white;
+            color: #7c3aed;
+            padding: 9px 13px;
+        }
+
+
+        .conteneur {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            min-height: calc(100vh - 75px);
+        }
+
+
+        /* =========================
+           MENU
+           ========================= */
+
+        .menu {
+            display: flex;
+            gap: 8px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+
+        .menu button {
+            background: #eee8ff;
+            color: #5b21b6;
+        }
+
+
+        .menu button.actif {
+            background: #7c3aed;
+            color: white;
+        }
+
+
+        /* =========================
+           DISCUSSION
+           ========================= */
+
+        #discussion {
+            display: block;
+        }
+
+
+        #messages {
+            height: calc(100vh - 240px);
+            min-height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+
+        .message {
+            max-width: 75%;
+            background: #eee8ff;
+            padding: 12px 15px;
+            border-radius: 18px;
+            margin-bottom: 12px;
+            word-wrap: break-word;
+        }
+
+
+        .message.moi {
+            margin-left: auto;
+            background: #7c3aed;
+            color: white;
+        }
+
+
+        .nom {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+
+        .heure {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+
+        .zone-envoi {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+
+        .zone-envoi input {
+            margin: 0;
+            flex: 1;
+        }
+
+
+        .zone-envoi button {
+            margin: 0;
+        }
+
+
+        /* =========================
+           GALERIE
+           ========================= */
+
+        #galerie {
+            display: none;
+            padding: 20px;
+        }
+
+
+        #galerie h2 {
+            color: #7c3aed;
+        }
+
+
+        .zone-photo {
+            background: #f5f0ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+
+        #resultatPhoto {
+            min-height: 20px;
+            font-weight: bold;
+        }
+
+
+        .photos {
+            display: grid;
+            grid-template-columns:
+                repeat(3, 1fr);
+            gap: 12px;
+        }
+
+
+        .photos img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 600px) {
+
+            .accueil-box {
+                padding: 30px 20px;
+            }
+
+
+            h1 {
+                font-size: 40px;
+            }
+
+
+            .barre {
+                padding: 0 12px;
+            }
+
+
+            .barre h2 {
+                font-size: 18px;
+            }
+
+
+            .message {
+                max-width: 85%;
+            }
+
+
+            .photos {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         ACCUEIL
+         ========================= -->
+
+    <div id="accueil">
+
+        <div class="accueil-box">
+
+            <div class="logo">
+                ❤️
+            </div>
+
+            <h1>Les Yiga</h1>
+
+            <p class="slogan">
+                Notre petit espace familial
+            </p>
+
+
+            <input
+                id="prenom"
+                type="text"
+                placeholder="Entre ton prénom"
+                maxlength="30"
+            >
+
+
+            <button
+                id="boutonEntrer"
+                class="entrer"
+                type="button"
+            >
+                Entrer dans Les Yiga
+            </button>
+
+
+            <div id="erreur"></div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         APPLICATION
+         ========================= -->
+
+    <div id="application">
+
+
+        <!-- BARRE DU HAUT -->
+
+        <div class="barre">
+
+            <div class="titre-barre">
+
+                <div class="petit-logo">
+                    ❤️
+                </div>
+
+                <h2>Les Yiga</h2>
+
+            </div>
+
+
+            <button
+                id="boutonQuitter"
+                type="button"
+            >
+                Quitter
+            </button>
+
+        </div>
+
+
+
+        <div class="conteneur">
+
+
+            <!-- MENU -->
+
+            <div class="menu">
+
+                <button
+                    id="boutonDiscussion"
+                    class="actif"
+                    type="button"
+                >
+                    💬 Discussion
+                </button>
+
+
+                <button
+                    id="boutonGalerie"
+                    type="button"
+                >
+                    📷 Galerie
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 DISCUSSION
+                 ========================= -->
+
+            <div id="discussion">
+
+                <div id="messages"></div>
+
+
+                <div class="zone-envoi">
+
+                    <input
+                        id="messageInput"
+                        type="text"
+                        maxlength="500"
+                        placeholder="Écris un message..."
+                    >
+
+
+                    <button
+                        id="boutonEnvoyer"
+                        type="button"
+                    >
+                        Envoyer
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 GALERIE
+                 ========================= -->
+
+            <div id="galerie">
+
+                <h2>📷 Nos photos</h2>
+
+                <p>
+                    Partagez vos photos avec Les Yiga ❤️
+                </p>
+
+
+                <div class="zone-photo">
+
+                    <input
+                        id="photoInput"
+                        type="file"
+                        accept="image/*"
+                    >
+
+
+                    <br><br>
+
+
+                    <button
+                        id="boutonPhoto"
+                        type="button"
+                    >
+                        📤 Envoyer la photo
+                    </button>
+
+
+                    <p id="resultatPhoto"></p>
+
+                </div>
+
+
+                <div
+                    id="photos"
+                    class="photos"
+                ></div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+    <script>
+
+
+        /* =========================
+           SUPABASE
+           ========================= */
+
+
+        const SUPABASE_URL =
+            "https://noimuqehzpyxgowlbknl.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_QeC-IYqa-9aJh6e0urp_4A_XwSrzYFa";
+
+
+        const db =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+
+        /* =========================
+           VARIABLES
+           ========================= */
+
+
+        let prenomActuel = "";
+
+
+
+        /* =========================
+           ELEMENTS
+           ========================= */
+
+
+        const accueil =
+            document.getElementById("accueil");
+
+        const application =
+            document.getElementById("application");
+
+        const prenom =
+            document.getElementById("prenom");
+
+        const erreur =
+            document.getElementById("erreur");
+
+        const boutonEntrer =
+            document.getElementById("boutonEntrer");
+
+        const boutonQuitter =
+            document.getElementById("boutonQuitter");
+
+        const messageInput =
+            document.getElementById("messageInput");
+
+        const boutonEnvoyer =
+            document.getElementById("boutonEnvoyer");
+
+        const messagesBox =
+            document.getElementById("messages");
+
+        const discussion =
+            document.getElementById("discussion");
+
+        const galerie =
+            document.getElementById("galerie");
+
+        const boutonDiscussion =
+            document.getElementById("boutonDiscussion");
+
+        const boutonGalerie =
+            document.getElementById("boutonGalerie");
+
+        const photoInput =
+            document.getElementById("photoInput");
+
+        const boutonPhoto =
+            document.getElementById("boutonPhoto");
+
+        const resultatPhoto =
+            document.getElementById("resultatPhoto");
+
+        const photosBox =
+            document.getElementById("photos");
+
+
+
+        /* =========================
+           ENTRER
+           ========================= */
+
+
+        boutonEntrer.addEventListener(
+            "click",
+            entrerDansLesYiga
+        );
+
+
+        prenom.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    entrerDansLesYiga();
+
+                }
+
+            }
+        );
+
+
+        async function entrerDansLesYiga() {
+
+            const nom =
+                prenom.value.trim();
+
+
+            if (nom === "") {
+
+                erreur.textContent =
+                    "Écris ton prénom 😊";
+
+                return;
+
+            }
+
+
+            prenomActuel = nom;
+
+            erreur.textContent = "";
+
+
+            accueil.style.display =
+                "none";
+
+            application.style.display =
+                "block";
+
+
+            await chargerMessages();
+
+            await afficherPhotos();
+
+        }
+
+
+
+        /* =========================
+           CHARGER LES MESSAGES
+           ========================= */
+
+
+        async function chargerMessages() {
+
+            const {
+                data,
+                error
+            } = await db
+                .from("messages")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(error);
+
+                messagesBox.innerHTML =
+                    `
+                    <p style="
+                        color:red;
+                        text-align:center;
+                    ">
+                        Impossible de charger les messages.
+                    </p>
+                    `;
+
+                return;
+
+            }
+
+
+            afficherMessages(
+                data || []
+            );
+
+        }
+
+
+
+        /* =========================
+           AFFICHER LES MESSAGES
+           ========================= */
+
+
+        function afficherMessages(messages) {
+
+            messagesBox.innerHTML = "";
+
+
+            if (messages.length === 0) {
+
+                messagesBox.innerHTML =
+                    `
+                    <div style="
+                        text-align:center;
+                        color:#777;
+                        padding:50px;
+                    ">
+                        Aucun message pour le moment ❤️
+                    </div>
+                    `;
+
+                return;
+
+            }
+
+
+            messages.forEach(
+                function(message) {
+
+                    const boite =
+                        document.createElement("div");
+
+                    boite.className =
+                        "message";
+
+
+                    if (
+                        message.name ===
+                        prenomActuel
+                    ) {
+
+                        boite.classList.add(
+                            "moi"
+                        );
+
+                    }
+
+
+                    const nom =
+                        document.createElement("div");
+
+                    nom.className = "nom";
+
+                    nom.textContent =
+                        message.name ||
+                        "Anonyme";
+
+
+                    const texte =
+                        document.createElement("div");
+
+                    texte.textContent =
+                        message.message ||
+                        "";
+
+
+                    const heure =
+                        document.createElement("div");
+
+                    heure.className =
+                        "heure";
+
+
+                    if (message.created_at) {
+
+                        heure.textContent =
+                            new Date(
+                                message.created_at
+                            ).toLocaleString(
+                                "fr-FR",
+                                {
+                                    dateStyle: "short",
+                                    timeStyle: "short"
+                                }
+                            );
+
+                    }
+
+
+                    boite.appendChild(nom);
+
+                    boite.appendChild(texte);
+
+                    boite.appendChild(heure);
+
+                    messagesBox.appendChild(
+                        boite
+                    );
+
+                }
+            );
+
+
+            messagesBox.scrollTop =
+                messagesBox.scrollHeight;
+
+        }
+
+
+
+        /* =========================
+           ENVOYER MESSAGE
+           ========================= */
+
+
+        boutonEnvoyer.addEventListener(
+            "click",
+            envoyerMessage
+        );
+
+
+        messageInput.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.key === "Enter") {
+
+                    envoyerMessage();
+
+                }
+
+            }
+        );
+
+
+        async function envoyerMessage() {
+
+            const texte =
+                messageInput.value.trim();
+
+
+            if (texte === "") {
+                return;
+            }
+
+
+            boutonEnvoyer.disabled =
+                true;
+
+
+            const {
+                error
+            } = await db
+                .from("messages")
+                .insert({
+                    name: prenomActuel,
+                    message: texte
+                });
+
+
+            boutonEnvoyer.disabled =
+                false;
+
+
+            if (error) {
+
+                console.error(error);
+
+                alert(
+                    "Impossible d'envoyer le message."
+                );
+
+                return;
+
+            }
+
+
+            messageInput.value = "";
+
+            await chargerMessages();
+
+        }
+
+
+
+        /* =========================
+           ENVOYER PHOTO
+           ========================= */
+
+
+        boutonPhoto.addEventListener(
+            "click",
+            envoyerPhoto
+        );
+
+
+        async function envoyerPhoto() {
+
+            const fichier =
+                photoInput.files[0];
+
+
+            if (!fichier) {
+
+                resultatPhoto.textContent =
+                    "❌ Choisis d'abord une photo.";
+
+                return;
+
+            }
+
+
+            resultatPhoto.textContent =
+                "⏳ Envoi de la photo...";
+
+
+            boutonPhoto.disabled =
+                true;
+
+
+            const nomFichier =
+                Date.now()
+                + "-"
+                + fichier.name.replace(
+                    /[^a-zA-Z0-9.-]/g,
+                    "_"
+                );
+
+
+            const {
+                error
+            } = await db.storage
+                .from("photos")
+                .upload(
+                    nomFichier,
+                    fichier,
+                    {
+                        cacheControl: "3600",
+                        upsert: false
+                    }
+                );
+
+
+            boutonPhoto.disabled =
+                false;
+
+
+            if (error) {
+
+                console.error(error);
+
+                resultatPhoto.textContent =
+                    "❌ Erreur : "
+                    + error.message;
+
+                return;
+
+            }
+
+
+            resultatPhoto.textContent =
+                "✅ Photo envoyée ! ❤️";
+
+
+            photoInput.value = "";
+
+
+            await afficherPhotos();
+
+        }
+
+
+
+        /* =========================
+           AFFICHER PHOTOS
+           ========================= */
+
+
+        async function afficherPhotos() {
+
+            const {
+                data,
+                error
+            } = await db.storage
+                .from("photos")
+                .list(
+                    "",
+                    {
+                        limit: 100,
+                        sortBy: {
+                            column: "created_at",
+                            order: "desc"
+                        }
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(error);
+
+                return;
+
+            }
+
+
+            photosBox.innerHTML = "";
+
+
+            const fichiers =
+                data || [];
+
+
+            fichiers.forEach(
+                function(photo) {
+
+                    const {
+                        data: urlData
+                    } = db.storage
+                        .from("photos")
+                        .getPublicUrl(
+                            photo.name
+                        );
+
+
+                    const image =
+                        document.createElement("img");
+
+
+                    image.src =
+                        urlData.publicUrl;
+
+
+                    image.alt =
+                        "Photo des Yiga";
+
+
+                    photosBox.appendChild(
+                        image
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =========================
+           MENU DISCUSSION
+           ========================= */
+
+
+        boutonDiscussion.addEventListener(
+            "click",
+            function() {
+
+                discussion.style.display =
+                    "block";
+
+                galerie.style.display =
+                    "none";
+
+
+                boutonDiscussion.classList.add(
+                    "actif"
+                );
+
+                boutonGalerie.classList.remove(
+                    "actif"
+                );
+
+            }
+        );
+
+
+
+        /* =========================
+           MENU GALERIE
+           ========================= */
+
+
+        boutonGalerie.addEventListener(
+            "click",
+            async function() {
+
+                discussion.style.display =
+                    "none";
+
+                galerie.style.display =
+                    "block";
+
+
+                boutonGalerie.classList.add(
+                    "actif"
+                );
+
+                boutonDiscussion.classList.remove(
+                    "actif"
+                );
+
+
+                await afficherPhotos();
+
+            }
+        );
+
+
+
+        /* =========================
+           QUITTER
+           ========================= */
+
+
+        boutonQuitter.addEventListener(
+            "click",
+            function() {
+
+                application.style.display =
+                    "none";
+
+                accueil.style.display =
+                    "flex";
+
+
+                prenom.value = "";
+
+                prenomActuel = "";
+
+            }
+        );
+
+
+
+        /* =========================
+           ACTUALISATION MESSAGES
+           ========================= */
+
+
+        setInterval(
+            async function() {
+
+                if (
+                    application.style.display ===
+                    "block"
+                ) {
+
+                    await chargerMessages();
+
+                }
+
+            },
+            5000
+        );
+
+
+    </script>
+
+</body>
+
+</html>
