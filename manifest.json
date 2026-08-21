@@ -1,0 +1,10 @@
+{
+  "name": "Les Yiga",
+  "short_name": "Les Yiga",
+  "description": "Notre petit espace familial ❤️",
+  "start_url": "/les-yiga/",
+  "scope": "/les-yiga/",
+  "display": "standalone",
+  "background_color": "#eadcff",
+  "theme_color": "#7c3aed"
+}
